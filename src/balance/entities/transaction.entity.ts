@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class Transaction {
@@ -14,8 +16,11 @@ export class Transaction {
   @Column({ type: 'int' })
   amount: number;
 
-  @Column({ type: 'character', enum: ['withdrawal', 'deposit'] })
+  @Column({ type: 'varchar', enum: ['withdrawal', 'deposit'] })
   action: string;
+
+  @ManyToOne(() => User, (user) => user.transactions)
+  user: User;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
