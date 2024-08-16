@@ -11,7 +11,6 @@ import configurations from './config/configuration';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      name: 'postgres',
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('postgres_host'),
@@ -20,6 +19,7 @@ import configurations from './config/configuration';
         password: configService.get('postgres_password'),
         database: configService.get('postgres_database'),
         autoLoadEntities: true,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
