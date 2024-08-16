@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -14,19 +14,29 @@ export class BalanceService {
   ) {}
 
   async getBalance(userId: number): Promise<number> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    return user.balance;
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (!user) throw new BadRequestException('User not found');
+      return user.balance;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   async updateBalance(userId: number, amount: number): Promise<number> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (!user) throw new BadRequestException('User not found');
 
-    const transaction = await this.createTransaction(user, amount);
-    const newBalance = user.balance + amount;
+      const transaction = await this.createTransaction(user, amount);
+      const newBalance = user.balance + amount;
 
-    await this.userRepository.update({ id: userId }, { balance: newBalance });
+      await this.userRepository.update({ id: userId }, { balance: newBalance });
 
-    return transaction.id;
+      return transaction.id;
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   async createTransaction(user: User, amount: number): Promise<Transaction> {
@@ -38,7 +48,6 @@ export class BalanceService {
       user,
     });
     await this.transactionRepository.save(transaction);
-
     return transaction;
   }
 }
