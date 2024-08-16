@@ -11,7 +11,7 @@ import { User } from './user.entity';
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ type: 'int' })
   amount: number;

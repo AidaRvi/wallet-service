@@ -11,7 +11,7 @@ import { Transaction } from './transaction.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar', unique: true })
   username: string;

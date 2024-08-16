@@ -18,7 +18,7 @@ export class BalanceController {
   @Post('/money')
   async updateBalance(
     @Body() body: updateBalanceDTO,
-  ): Promise<{ reference_id: number }> {
+  ): Promise<{ reference_id: string }> {
     const referenceId = await this.balanceService.updateBalance(
       body.user_id,
       body.amount,

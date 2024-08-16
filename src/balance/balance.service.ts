@@ -13,7 +13,7 @@ export class BalanceService {
     private transactionRepository: Repository<Transaction>,
   ) {}
 
-  async getBalance(userId: number): Promise<number> {
+  async getBalance(userId: string): Promise<number> {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) throw new BadRequestException('User not found');
@@ -23,7 +23,7 @@ export class BalanceService {
     }
   }
 
-  async updateBalance(userId: number, amount: number): Promise<number> {
+  async updateBalance(userId: string, amount: number): Promise<string> {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) throw new BadRequestException('User not found');
