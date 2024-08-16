@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configurations from './config/configuration';
+import { BalanceModule } from './balance/balance.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import configurations from './config/configuration';
       }),
       inject: [ConfigService],
     }),
+    BalanceModule,
   ],
   controllers: [],
   providers: [],
