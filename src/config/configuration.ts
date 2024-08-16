@@ -6,5 +6,4 @@ export default () => ({
   postgres_username: process.env.POSTGRESS_USERNAME,
   postgres_password: process.env.POSTGRESS_PASSWORD,
   postgres_database: process.env.POSTGRESS_DATABASE,
-  log_file: process.env.LOG_FILE,
 });
