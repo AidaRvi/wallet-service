@@ -1,5 +1,7 @@
 import { Controller, Get, Body, Query, Post } from '@nestjs/common';
 import { BalanceService } from './balance.service';
+import { updateBalanceDTO } from './dto/update-balance.dto';
+import { getBalanceDTO } from './dto/get-balance.dto';
 
 @Controller('api/v1')
 export class BalanceController {
@@ -7,18 +9,20 @@ export class BalanceController {
 
   @Get('/balance')
   async getBalance(
-    @Query('user_id') userId: number,
+    @Query() query: getBalanceDTO,
   ): Promise<{ balance: number }> {
-    const balance = await this.balanceService.getBalance(userId);
+    const balance = await this.balanceService.getBalance(query.user_id);
     return { balance };
   }
 
   @Post('/money')
   async updateBalance(
-    @Body('user_id') userId: number,
-    @Body('amount') amount: number,
+    @Body() body: updateBalanceDTO,
   ): Promise<{ reference_id: number }> {
-    const referenceId = await this.balanceService.updateBalance(userId, amount);
+    const referenceId = await this.balanceService.updateBalance(
+      body.user_id,
+      body.amount,
+    );
     return { reference_id: referenceId };
   }
 }
