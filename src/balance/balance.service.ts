@@ -29,9 +29,12 @@ export class BalanceService {
       if (!user) throw new BadRequestException('User not found');
 
       const transaction = await this.createTransaction(user, amount);
-      const newBalance = user.balance + amount;
+      user.balance += amount;
 
-      await this.userRepository.update({ id: userId }, { balance: newBalance });
+      await this.userRepository.update(
+        { id: userId },
+        { balance: user.balance },
+      );
 
       return transaction.id;
     } catch (error) {
