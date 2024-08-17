@@ -40,7 +40,7 @@ export class BalanceService {
   }
 
   async createTransaction(user: User, amount: number): Promise<Transaction> {
-    const action = amount[0] == '-' ? 'withdrawal' : 'deposit';
+    const action = amount.toString()[0] == '-' ? 'withdrawal' : 'deposit';
 
     const transaction = this.transactionRepository.create({
       amount: Math.abs(amount),
