@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configurations from './config/configuration';
 import { BalanceModule } from './balance/balance.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { UserService } from './balance/user.service';
+import { User } from './balance/entities/user.entity';
 
 @Module({
   imports: [
@@ -27,8 +29,9 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     BalanceModule,
     ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [],
-  providers: [],
+  providers: [UserService],
 })
 export class AppModule {}

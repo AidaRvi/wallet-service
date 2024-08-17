@@ -1,12 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { LoggingInterceptor } from './logger.interceptor';
+import { UserService } from './balance/user.service';
+
+let app: INestApplication<any>;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  app = await NestFactory.create(AppModule, { cors: true });
 
   const configService = app.get(ConfigService);
   app.useGlobalPipes(new ValidationPipe());
@@ -27,4 +30,13 @@ async function bootstrap() {
     console.log(`wallet-service is running on port "${port}"`);
   });
 }
-bootstrap();
+bootstrap().then(async () => {
+  await createUserInDatabase();
+});
+
+const createUserInDatabase = async (): Promise<void> => {
+  const randomUsername = `user_${Math.random().toString(36).substring(2, 8)}`;
+  const userService = app.get(UserService);
+  const user = await userService.createUser(randomUsername, 1000);
+  console.log(`** created userId: ${user.id}`);
+};
